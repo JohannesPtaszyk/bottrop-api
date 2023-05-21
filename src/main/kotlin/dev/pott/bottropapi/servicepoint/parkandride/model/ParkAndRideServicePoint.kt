@@ -1,10 +1,9 @@
-package dev.pott.bottropapi.servicepoint.parkandride.dto
+package dev.pott.bottropapi.servicepoint.parkandride.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class ParkAndRideServicePointDtoV1(
+data class ParkAndRideServicePoint (
     @SerialName("id")
     val id: String,
 
@@ -15,20 +14,20 @@ data class ParkAndRideServicePointDtoV1(
     val capacity: Int,
 
     @SerialName("type")
-    val type: ParkingSpotTypeDtoV1,
+    val type: ParkingSpotType,
 
     @SerialName("stationName")
     val stationName: String,
 
     @SerialName("price")
-    val price: PriceDtoV1,
+    val price: Price,
 
     @SerialName("publicTransportLines")
     val publicTransportLines: List<String>,
 
     @SerialName("coordinates")
-    val coordinates: CoordinatesDtoV1,
+    val coordinates: Coordinates,
 
     @SerialName("address")
-    val address: AddressDtoV1,
+    val address: Address,
 )
