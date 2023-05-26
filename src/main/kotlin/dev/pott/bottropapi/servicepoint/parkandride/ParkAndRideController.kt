@@ -4,16 +4,22 @@ import dev.pott.bottropapi.servicepoint.parkandride.dto.*
 import dev.pott.bottropapi.servicepoint.parkandride.entity.ParkAndRideServicePointEntity
 import dev.pott.bottropapi.servicepoint.parkandride.model.ParkingSpotType
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.annotation.Version
+import org.springframework.http.CacheControl
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
+import java.util.concurrent.TimeUnit
 
 @RestController
-class ParkAndRideController(@Autowired private val service: ParkAndRideService) {
+class ParkAndRideController(private val service: ParkAndRideService) {
 
+    @ResponseBody
     @GetMapping("/v1/service-points/park-and-ride")
-    fun getAll(): ParkAndRideServicePointsResponseV1 {
+    fun getAll(): ResponseEntity<ParkAndRideServicePointsResponseV1> {
         val servicePoints = service.getAllServicePoints().map {
             ParkAndRideServicePointDtoV1(
                 id = it.id,
@@ -43,7 +49,10 @@ class ParkAndRideController(@Autowired private val service: ParkAndRideService) 
                 }
             )
         }
-        return ParkAndRideServicePointsResponseV1(servicePoints)
+        val response = ParkAndRideServicePointsResponseV1(servicePoints)
+        return ResponseEntity.ok()
+            .cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS).mustRevalidate().noTransform())
+            .body(response)
     }
 
 }
